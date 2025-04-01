@@ -39,6 +39,12 @@ function App() {
     setUserInput("");
   };
   
+  const copyText = () => {
+    navigator.clipboard.writeText(response).then(() => {
+      alert('Text copied to clipboard');
+    });
+  };
+
   return(
     <div>
       <img className="icon" src={icon}/>
@@ -54,6 +60,7 @@ function App() {
       <div className="row">
         <textarea className="userInput" placeholder="Ask me anything..." onChange={(e) => setUserInput(e.target.value)}/>
         <button onClick={promptAI}>Send</button>
+        <button onClick={copyText}>Copy</button>
       </div>
 
     </div>
