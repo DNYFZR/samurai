@@ -16,33 +16,43 @@ function App() {
   const maxTokens = 2000;
 
   const promptAI = async() => {
-    setResponse("Processing...");
+    if(userInput.length > 0) {
+      setResponse("Processing...");
 
-    const messages = [
-      { role: "system", content: "You are a helpful assistant." },
-      { role: "user", content: userInput },
-    ];
+      const messages = [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: userInput },
+      ];
 
-    const model = await pipeline(
-      "text-generation",
-      "Mozilla/Qwen2.5-0.5B-Instruct",
-      { dtype: "q8" },
-    );
+      const model = await pipeline(
+        "text-generation",
+        "Mozilla/Qwen2.5-0.5B-Instruct",
+        { dtype: "q8" },
+      );
+      
+      let result = await model(
+        messages, 
+        { max_new_tokens: maxTokens, do_sample:false },
+      );
+      
+      const text:string = Object(result)[0].generated_text.at(-1).content;
+      setResponse(text);
+      setUserInput("");
+    } else {
+      alert("Please provide a prompt before sending 😇")
+    }
     
-    let result = await model(
-      messages, 
-      { max_new_tokens: maxTokens, do_sample:false },
-    );
-    
-    const text:string = Object(result)[0].generated_text.at(-1).content;
-    setResponse(text);
-    setUserInput("");
   };
   
   const copyText = () => {
-    navigator.clipboard.writeText(response).then(() => {
-      alert('Text copied to clipboard');
-    });
+    if(response.length > 0) {
+      navigator.clipboard.writeText(response).then(() => {
+        alert('Text copied to clipboard');
+      });
+    } else {
+      alert("Nothing to copy 😇")
+    }
+    
   };
 
   return(
