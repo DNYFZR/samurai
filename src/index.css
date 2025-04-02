@@ -34,11 +34,13 @@ div {
 .row {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 button {
   width: 6em;
-  border-radius: 8px;
+  height: 4em;
+  border-radius: 12px;
   border: none;
   margin: 1vw;
   font-size: 1em;
